@@ -2,6 +2,7 @@
 import { slugifyStr } from "@/utils/slugify";
 import type { CollectionEntry } from "astro:content";
 import Datetime from "./Datetime.astro";
+import { Picture } from "astro:assets";
 
 export interface Props {
   href?: string;
@@ -11,27 +12,48 @@ export interface Props {
 
 const { href, frontmatter, secHeading = true } = Astro.props;
 
-const { title, pubDatetime, modDatetime, description } = frontmatter;
+const { title, pubDatetime, modDatetime, description, ogImage } = frontmatter;
 
 const headerProps = {
-  style: { viewTransitionName: slugifyStr(title) },
-  class: "text-lg font-medium decoration-dashed hover:underline",
+  class: "text-xl font-bold",
 };
 ---
 
-<li class="my-6">
-  <a
-    href={href}
-    class="inline-block text-lg font-medium text-accent decoration-dashed underline-offset-4 focus-visible:no-underline focus-visible:underline-offset-0"
+<li class="my-12 flex shrink grow flex-row gap-2 sm:gap-12">
+  <!-- Left Side Content -->
+  <div class="basis-3/4">
+    <a
+      href={href}
+      class="inline-block text-lg font-medium text-accent hover:opacity-75"
+    >
+      {
+        secHeading ? (
+          <h2 {...headerProps}>{title}</h2>
+        ) : (
+          <h3 {...headerProps}>{title}</h3>
+        )
+      }
+    </a>
+    <p class="line-clamp-3 py-1 sm:line-clamp-5">{description}</p>
+    <Datetime pubDatetime={pubDatetime} modDatetime={modDatetime} />
+  </div>
+
+  <!-- Right Side Image -->
+  <!-- Note, Images are 171x96px, original images are meant to be 1600x900 -->
+  <!-- For small screens, 103x58px -->
+  <div
+    class:list={[
+      "flex items-center self-center",
+      "overflow-clip rounded-lg opacity-75 contrast-125 grayscale",
+      "h-[58px] w-[103px] min-w-[103px]",
+      "sm:h-[96px] sm:w-[171px] sm:min-w-[171px]",
+    ]}
   >
-    {
-      secHeading ? (
-        <h2 {...headerProps}>{title}</h2>
-      ) : (
-        <h3 {...headerProps}>{title}</h3>
-      )
-    }
-  </a>
-  <Datetime pubDatetime={pubDatetime} modDatetime={modDatetime} />
-  <p>{description}</p>
+    <Picture
+      src={ogImage as ImageMetadata}
+      alt={title}
+      width={171}
+      height={96}
+    />
+  </div>
 </li>

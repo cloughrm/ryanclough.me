@@ -5,13 +5,13 @@ import Header from "@/components/Header.astro";
 import Footer from "@/components/Footer.astro";
 import Tag from "@/components/Tag.astro";
 import Datetime from "@/components/Datetime.astro";
-import EditPost from "@/components/EditPost.astro";
 import ShareLinks from "@/components/ShareLinks.astro";
 import BackButton from "@/components/BackButton.astro";
 import { slugifyStr } from "@/utils/slugify";
 import IconChevronLeft from "@/assets/icons/IconChevronLeft.svg";
 import IconChevronRight from "@/assets/icons/IconChevronRight.svg";
 import { SITE } from "@/config";
+import { Picture } from "astro:assets";
 
 export interface Props {
   post: CollectionEntry<"blog">;
@@ -29,7 +29,6 @@ const {
   pubDatetime,
   modDatetime,
   tags,
-  editPost,
 } = post.data;
 
 const { Content } = await render(post);
@@ -89,53 +88,54 @@ const nextPost =
     ]}
     data-pagefind-body
   >
-    <h1
-      transition:name={slugifyStr(title)}
-      class="inline-block text-2xl font-bold text-accent sm:text-3xl"
-    >
+    <h1 class="inline-block text-2xl font-bold text-accent sm:text-3xl">
       {title}
     </h1>
-    <div class="flex items-center gap-4">
+    <div class="flex flex-col items-start sm:flex-row sm:items-center sm:gap-4">
       <Datetime
         pubDatetime={pubDatetime}
         modDatetime={modDatetime}
         size="lg"
         class="my-2"
       />
-      <EditPost class="max-sm:hidden" editPost={editPost} postId={post.id} />
+      <span class="hidden sm:block">|</span>
+      <ShareLinks />
     </div>
+
+    <!-- Blog Post Image -->
+    <Picture
+      src={post.data.ogImage as ImageMetadata}
+      alt={title}
+      class="mx-auto my-12 block rounded-lg opacity-75 contrast-125 grayscale"
+    />
+
     <article id="article" class="mx-auto prose mt-8 max-w-3xl">
       <Content />
     </article>
 
     <hr class="my-8 border-dashed" />
 
-    <EditPost class="sm:hidden" editPost={editPost} postId={post.id} />
-
-    <ul class="mt-4 mb-8 sm:my-8">
-      {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
-    </ul>
-
     <div
       class="flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-end sm:gap-4"
     >
-      <ShareLinks />
-
+      <ul>
+        {tags.map(tag => <Tag tag={slugifyStr(tag)} tagName={tag} />)}
+      </ul>
       <button
         id="back-to-top"
-        class="focus-outline py-1 whitespace-nowrap hover:opacity-75"
+        class="focus-outline flex items-center gap-1 py-1 whitespace-nowrap hover:opacity-75"
       >
         <IconChevronLeft class="inline-block rotate-90" />
         <span>Back to Top</span>
       </button>
     </div>
 
-    <hr class="my-6 border-dashed" />
+    <hr class="my-8 border-dashed" />
 
     <!-- Previous/Next Post Buttons -->
-    <div data-pagefind-ignore class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+    <div data-pagefind-ignore class="grid grid-cols-2 gap-6">
       {
-        prevPost && (
+        prevPost ? (
           <a
             href={`/posts/${prevPost.slug}`}
             class="flex w-full gap-1 hover:opacity-75"
@@ -146,6 +146,8 @@ const nextPost =
               <div class="text-sm text-accent/85">{prevPost.title}</div>
             </div>
           </a>
+        ) : (
+          <a />
         )
       }
       {
