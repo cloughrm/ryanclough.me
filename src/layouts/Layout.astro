@@ -5,6 +5,7 @@ import { LOCALE } from "@/constants";
 import "@/styles/global.css";
 import "@fontsource-variable/roboto"; // Supports weights 100-900
 import "@fontsource-variable/mulish"; // Supports weights 200-900
+import SpeedInsights from "@vercel/speed-insights/astro";
 
 const googleSiteVerification = import.meta.env.PUBLIC_GOOGLE_SITE_VERIFICATION;
 
@@ -137,6 +138,7 @@ const structuredData = {
   </head>
   <body>
     <slot />
+    <SpeedInsights />
   </body>
 </html>
 
