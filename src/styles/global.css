@@ -17,7 +17,7 @@ html[data-theme="dark"] {
   --foreground: hsl(48, 71%, 98%);
   --accent: hsl(0, 0%, 100%);
   --muted: #191919;
-  --border: #161616;
+  --border: #3b3b3b;
 }
 
 @theme inline {
