@@ -14,4 +14,5 @@ export const SITE = {
   showPosts: false,
   showBackButton: false, // show back button in post detail
   dynamicOgImage: true,
+  showDevWarning: false,
 } as const;

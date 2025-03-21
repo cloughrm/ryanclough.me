@@ -11,13 +11,15 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
 
 <Layout title={`Search | ${SITE.title}`}>
   <Header />
-  <Main pageTitle="Search" pageDesc="Search any article ...">
+  <Main pageTitle="Search">
     <div id="pagefind-search" transition:persist data-backurl={backUrl}></div>
   </Main>
   <Footer />
 </Layout>
 
 <script>
+  import { SITE } from "@/config";
+
   const pageFindInputClass = ".pagefind-ui__search-input";
   function initSearch() {
     const pageFindSearch: HTMLElement | null =
@@ -34,7 +36,7 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
       const { PagefindUI } = await import("@pagefind/default-ui");
 
       // Display warning inn dev mode
-      if (import.meta.env.DEV) {
+      if (import.meta.env.DEV && SITE.showDevWarning) {
         pageFindSearch.innerHTML = `
             <div class="bg-muted/75 rounded p-4 space-y-4 mb-4">
               <p><strong>DEV mode Warning! </strong>You need to build the project at least once to see the search results during development.</p>
@@ -100,7 +102,7 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
 
 <style is:global>
   #pagefind-search {
-    --pagefind-ui-font: var(--font-mono);
+    --pagefind-ui-font: var(--font-sans);
     --pagefind-ui-text: var(--foreground);
     --pagefind-ui-background: var(--background);
     --pagefind-ui-border: var(--border);
@@ -139,10 +141,6 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
 
     .pagefind-ui__result:last-of-type {
       border-bottom: 0;
-    }
-
-    .pagefind-ui__result-nested .pagefind-ui__result-link:before {
-      font-family: system-ui;
     }
   }
 </style>
