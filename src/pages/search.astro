@@ -18,6 +18,7 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
 </Layout>
 
 <script>
+  const pageFindInputClass = ".pagefind-ui__search-input";
   function initSearch() {
     const pageFindSearch: HTMLElement | null =
       document.querySelector("#pagefind-search");
@@ -41,6 +42,21 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
             </div>
           `;
       }
+
+      // Watch for the search input to appear in the DOM
+      const observer = new MutationObserver((mutations, obs) => {
+        const searchInput = document.querySelector(
+          pageFindInputClass
+        ) as HTMLInputElement;
+        if (searchInput) {
+          searchInput.focus();
+          obs.disconnect(); // Stop observing once we've found and focused the input
+        }
+      });
+      observer.observe(pageFindSearch, {
+        childList: true,
+        subtree: true,
+      });
 
       // Init pagefind ui
       const search = new PagefindUI({

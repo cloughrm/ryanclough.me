@@ -1,12 +1,12 @@
 ### TODO:
-- set up deployment for ryanclough.me
-- remove default content
 - post details, fixed image size
 - code block colors
 - consistent link/button styling across heading links, tags
 
 
 ### Done
+- remove default content
+- set up deployment for ryanclough.me
 - Implement header 
 - Implement social links
 - implement share links
@@ -22,3 +22,7 @@ Astro will optimized images within the src directory, to use one in markdown:
 ![AstroPaper v5](@/assets/images/AstroPaper-v5.png)
 
 https://unsplash.com for royality free images
+
+
+### Blog post ideas
+- observer: https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
