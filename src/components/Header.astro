@@ -166,7 +166,8 @@ const isActive = (path: string) => {
 <script>
   function showTitle() {
     const title = document.querySelector("#title-text") as HTMLElement;
-    const siteTitle = title.parentElement?.getAttribute("data-site-title")!;
+    const siteTitle =
+      title.parentElement?.getAttribute("data-site-title") || "";
     const cursor = document.querySelector("#cursor") as HTMLElement;
     title.textContent += siteTitle;
     cursor.remove();
@@ -180,7 +181,8 @@ const isActive = (path: string) => {
     ) as HTMLElement;
     if (!title || !cursor || !cursorWrapper) return;
 
-    const siteTitle = title.parentElement?.getAttribute("data-site-title")!;
+    const siteTitle =
+      title.parentElement?.getAttribute("data-site-title") || "";
 
     // Wait for a moment
     await new Promise(resolve => setTimeout(resolve, 500));

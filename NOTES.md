@@ -3,6 +3,8 @@
 - remove default content
 - post details, fixed image size
 - code block colors
+- consistent link/button styling across heading links, tags
+
 
 ### Done
 - Implement header 
