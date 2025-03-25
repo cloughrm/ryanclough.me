@@ -91,12 +91,12 @@ const nextPost =
     <h1 class="inline-block text-2xl font-bold text-accent sm:text-3xl">
       {title}
     </h1>
-    <div class="flex flex-col items-start sm:flex-row sm:items-center sm:gap-4">
+    <div class="flex flex-col items-start sm:flex-row sm:items-center sm:gap-2">
       <Datetime
         pubDatetime={pubDatetime}
         modDatetime={modDatetime}
         size="lg"
-        class="my-2"
+        class="mt-2 sm:mt-0"
       />
       <span class="hidden sm:block">|</span>
       <ShareLinks />
@@ -106,7 +106,7 @@ const nextPost =
     <Picture
       src={post.data.ogImage as ImageMetadata}
       alt={title}
-      class="mx-auto my-12 block rounded-lg opacity-75 contrast-125 grayscale"
+      class="mx-auto my-8 block rounded-lg opacity-75 contrast-125 grayscale"
     />
 
     <article id="article" class="mx-auto prose mt-8 max-w-3xl">

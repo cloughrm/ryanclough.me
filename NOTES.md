@@ -1,10 +1,10 @@
 ### TODO:
 - post details, fixed image size
-- code block colors
 - consistent link/button styling across heading links, tags
 
 
 ### Done
+- code block colors
 - remove default content
 - set up deployment for ryanclough.me
 - Implement header 
