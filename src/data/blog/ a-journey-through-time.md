@@ -16,7 +16,7 @@ _This post is based on the [404s](https://github.com/cloughrm/404s/) project by 
 
 ## 1. Windows 95 Blue Screen of Death
 
-<video autoplay loop muted playsinline>
+<video autoplay loop muted playsinline preload="auto" class="video-player">
   <source src="/assets/videos/windows-95-bsod.mov" type="video/mp4">
   Your browser does not support the video tag.
 </video>
@@ -31,7 +31,7 @@ The Windows 95 BSOD 404 page perfectly captures the essence of the classic Windo
 
 ## 2. Windows 8 Blue Screen
 
-<video autoplay loop muted playsinline>
+<video autoplay loop muted playsinline preload="auto" class="video-player">
   <source src="/assets/videos/windows-8-bsod.mov" type="video/mp4">
   Your browser does not support the video tag.
 </video>

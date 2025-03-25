@@ -170,6 +170,22 @@ const nextPost =
 </Layout>
 
 <script is:inline data-astro-rerun>
+  /** Ensure videos autoplay correctly on Safari */
+  function handleVideoPlayback() {
+    const videos = document.querySelectorAll(".video-player");
+    videos.forEach(video => {
+      // Force load and play the video
+      video.load();
+      // Play video once loaded
+      video.addEventListener("loadeddata", () => {
+        video.play();
+      });
+    });
+  }
+  handleVideoPlayback();
+</script>
+
+<script is:inline data-astro-rerun>
   /** Create a progress indicator
    *  at the top */
   function createProgressBar() {
