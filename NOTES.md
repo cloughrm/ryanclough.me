@@ -26,3 +26,21 @@ https://unsplash.com for royality free images
 
 ### Blog post ideas
 - observer: https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+- CSS layer vs z-index
+```
+/* @layer controls which style rule wins */
+@layer base {
+  .button { background: blue; }
+}
+@layer custom {
+  .button { background: red; }  /* This wins because custom layer comes after base */
+}
+
+/* z-index controls visual stacking of elements */
+.modal { 
+  z-index: 10;  /* Modal appears above the overlay */
+}
+.overlay {
+  z-index: 5;   /* Overlay appears above normal content but below modal */
+}
+```
