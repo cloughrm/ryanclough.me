@@ -14,8 +14,6 @@ As someone who builds software for a living & as a hobby - I go through lots of 
 
 ## Stock Apps to Delete
 
-Lets be honest - nobody uses these apps, right?
-
 - GarageBand
 - iMovie
 - Keynote
@@ -83,16 +81,14 @@ As of March 2025, my daily driver are Safari + [Brave](https://brave.com/).
 
 ### Terminal Utilities
 
-- Install Homebrew
+- Install Homebrew & Utils
 
   ```bash
   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
   ```
 
 - Hush the login messages: `touch ~/.hushlogin`
-- Install httpie: `brew install httpie`
-- Install Node.js: `brew install node`
-- Install htop: `brew install htop`
+- Install httpie: `brew install httpie node htop yt-dlp gh`
 
 ### .zshrc
 

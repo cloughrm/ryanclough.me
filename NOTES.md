@@ -26,6 +26,7 @@ https://unsplash.com for royality free images
 
 ### Blog post ideas
 - observer: https://developer.mozilla.org/en-US/docs/Web/API/MutationObserver
+- Deep dive on cookies 
 - CSS layer vs z-index
 ```
 /* @layer controls which style rule wins */
