@@ -99,9 +99,9 @@ If your app is primarily UI-driven but sometimes needs API access (for automatio
 
    - For all user interactions that happen through your web UI, use Server Actions.
 
-2. **Expose API Routes for External Access**
+2. **Where Needed, Expose API Routes for External Access**
 
-   - For endpoints that need to be accessed by scripts, third-party services, or mobile apps, define API routes.
+   - For endpoints that need to be accessed by scripts, third-party services, or mobile apps, define API routes. Modern frameworks like Next and Remix allow you to easily create API endpoints directly within the same codebase as your Frontend.
 
 3. **Share Business Logic**
    - Extract your core logic (e.g., database operations, validation) into shared modules.
@@ -109,16 +109,17 @@ If your app is primarily UI-driven but sometimes needs API access (for automatio
 
 **Example:**
 
-Manage database logic in a single place, e.g. `/lib`
+Manage database logic / business logic in a single place, e.g. `/lib`
 
 ```ts
 // lib/users.ts
 export async function createUserInDb(data: any) {
   // ...insert into DB
+  // ...other business logic upon new user
 }
 ```
 
-Implement any business logic in the server action.
+Implement a "thin" server action.
 
 ```ts
 // app/users/page.tsx (Server Action)
@@ -127,19 +128,19 @@ import { createUserInDb } from "@/lib/users";
 export async function createUser(formData: FormData) {
   const data = Object.fromEntries(formData);
   await createUserInDb(data);
-  // ... other business logic
 }
 ```
 
-If you need an API route for a specific server action, just call the server action from a "thin" API handler.
+As needed, add "thin" API routes for a specific automation needs.
 
 ```ts
 // app/api/users/route.ts (API Route)
-import { createUser } from "@/app/users/page"; // Import the server action
+import { createUserInDb } from "@/lib/users";
 
 export async function POST(req: Request) {
   const data = await req.json();
-  await createUser(data);
+  // API specific validation, rate limiting, etc
+  await createUserInDb(data);
   return new Response("User created", { status: 201 });
 }
 ```
