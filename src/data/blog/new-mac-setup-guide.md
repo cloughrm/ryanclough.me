@@ -179,6 +179,7 @@ source /Users/ryan/.docker/init-zsh.sh || true # Added by Docker Desktop
   - Position on screen: `Bottom`
   - Click wallpaper to reveal desktop: `Only in Stage Manager`
   - Tiled windows have margins: `false`
+  - Hot Corners... → Disable All
 - Displays
   - Automatically adjust brightness: `false`
 - Battery
