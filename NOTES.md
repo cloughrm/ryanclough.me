@@ -1,4 +1,5 @@
 ### TODO:
+- OG image for `/` !
 - post details, fixed image size
 - consistent link/button styling across heading links, tags
 - Share on linkedin button not working on mobile
