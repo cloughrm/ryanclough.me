@@ -14,7 +14,7 @@ const blog = defineCollection({
       featured: z.boolean().optional(),
       draft: z.boolean().optional(),
       tags: z.array(z.string()).default(["others"]),
-      ogImage: image().optional(),
+      ogImage: image(),
       description: z.string(),
       canonicalURL: z.string().optional(),
       editPost: z
