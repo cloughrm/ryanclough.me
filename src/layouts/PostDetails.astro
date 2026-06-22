@@ -34,12 +34,14 @@ const {
 const { Content } = await render(post);
 
 let ogImageUrl: string | undefined;
+const localOgImage =
+  typeof initOgImage === "object" && initOgImage?.src ? initOgImage : undefined;
 
 // Determine OG image source
 if (typeof initOgImage === "string") {
   ogImageUrl = initOgImage; // Remote OG image (absolute URL)
-} else if (initOgImage?.src) {
-  ogImageUrl = initOgImage.src; // Local asset
+} else if (localOgImage) {
+  ogImageUrl = localOgImage.src; // Local asset
 }
 
 // Use dynamic OG image if enabled and no remote|local ogImage
@@ -103,11 +105,23 @@ const nextPost =
     </div>
 
     <!-- Blog Post Image -->
-    <Picture
-      src={post.data.ogImage as ImageMetadata}
-      alt={title}
-      class="mx-auto my-8 block rounded-lg opacity-75 contrast-125 grayscale"
-    />
+    {
+      localOgImage ? (
+        <Picture
+          src={localOgImage}
+          alt={title}
+          class="mx-auto my-8 block rounded-lg opacity-75 contrast-125 grayscale"
+        />
+      ) : (
+        ogImageUrl && (
+          <img
+            src={ogImageUrl}
+            alt={title}
+            class="mx-auto my-8 block rounded-lg opacity-75 contrast-125 grayscale"
+          />
+        )
+      )
+    }
 
     <article id="article" class="mx-auto prose mt-8 max-w-3xl">
       <Content />

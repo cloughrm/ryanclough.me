@@ -1,8 +1,9 @@
 ---
-// import { slugifyStr } from "@/utils/slugify";
 import type { CollectionEntry } from "astro:content";
 import Datetime from "./Datetime.astro";
 import { Picture } from "astro:assets";
+import { slugifyStr } from "@/utils/slugify";
+import { SITE } from "@/config";
 
 export interface Props {
   href?: string;
@@ -17,6 +18,16 @@ const { title, pubDatetime, modDatetime, description, ogImage } = frontmatter;
 const headerProps = {
   class: "text-xl font-bold",
 };
+
+const localOgImage =
+  typeof ogImage === "object" && ogImage?.src ? ogImage : undefined;
+const ogImageUrl = typeof ogImage === "string" ? ogImage : undefined;
+const fallbackOgImageUrl = SITE.dynamicOgImage
+  ? `/posts/${slugifyStr(title)}/index.png`
+  : SITE.ogImage
+    ? `/${SITE.ogImage}`
+    : undefined;
+const thumbnailUrl = ogImageUrl ?? fallbackOgImageUrl;
 ---
 
 <li class="my-12 flex flex-col gap-3">
@@ -48,12 +59,23 @@ const headerProps = {
         "sm:h-[96px] sm:w-[171px] sm:min-w-[171px]",
       ]}
     >
-      <Picture
-        src={ogImage as ImageMetadata}
-        alt={title}
-        width={171}
-        height={96}
-      />
+      {
+        localOgImage ? (
+          <Picture src={localOgImage} alt={title} width={171} height={96} />
+        ) : (
+          thumbnailUrl && (
+            <img
+              src={thumbnailUrl}
+              alt={title}
+              width="171"
+              height="96"
+              loading="lazy"
+              decoding="async"
+              class="h-full w-full object-cover"
+            />
+          )
+        )
+      }
     </div>
   </div>
 </li>
