@@ -29,11 +29,11 @@ As someone who builds software for a living & as a hobby - I go through lots of 
 
 ## Browser: Brave
 
-As of March 2025, my daily driver are Safari + [Brave](https://brave.com/).
+As of March 2025, my daily drivers are Safari + [Brave](https://brave.com/).
 
 ### Set up Brave Sync
 
-- Settings → Sync → Manage you synced devices
+- Settings → Sync → Manage your synced devices
 
 ## Utilities to Install
 
@@ -68,13 +68,13 @@ As of March 2025, my daily driver are Safari + [Brave](https://brave.com/).
 ### Terminal Preferences
 
 - Profiles → Text
-  - Text → Background → Color & Affects → Opacity: `95%`
+  - Text → Background → Color & Effects → Opacity: `95%`
   - Text → Font → Change → Size: `13`
   - Text → Cursor: `Vertical Bar`
 - Profiles → Keyboard → Use Option as Meta key: `true`
 - Profiles → Window
   - Path: `true`
-  - Acvite process name: `false`
+  - Active process name: `false`
   - Dimensions: `false`
 - Profiles: Click `Default` to save
 - Edit Menu → Marks → Automatically Mark Prompt Lines: `false`
@@ -168,7 +168,7 @@ source /Users/ryan/.docker/init-zsh.sh || true # Added by Docker Desktop
   - Control Center Modules → Bluetooth: `Show in Menu Bar`
   - Other Modules → Battery → Show Percentage: `true`
   - Menu Bar Only → Spotlight: `Don't Show in Menu Bar`
-- Apple Intellignce & Siri
+- Apple Intelligence & Siri
   - Listen for Hey Siri: Off
     - Siri voice: `Australian Voice 2`
 - Spotlight

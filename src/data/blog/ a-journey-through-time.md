@@ -48,7 +48,7 @@ The page uses the Noto Sans font family and includes a JavaScript-powered progre
 
 ## 3. macOS Kernel Panic
 
-![macOS Kernel Panic](@/assets/images/mac-os-kernel-panick.png)
+![macOS Kernel Panic](@/assets/images/mac-os-kernel-panic.png)
 
 The macOS Kernel Panic 404 page takes a different approach, recreating the classic macOS kernel panic screen. This version:
 
