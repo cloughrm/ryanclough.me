@@ -165,12 +165,14 @@ const isActive = (path: string) => {
 
 <script>
   function showTitle() {
-    const title = document.querySelector("#title-text") as HTMLElement;
+    const title = document.querySelector("#title-text") as HTMLElement | null;
+    if (!title) return;
+
     const siteTitle =
       title.parentElement?.getAttribute("data-site-title") || "";
-    const cursor = document.querySelector("#cursor") as HTMLElement;
-    title.textContent += siteTitle;
-    cursor.remove();
+    const cursor = document.querySelector("#cursor") as HTMLElement | null;
+    title.textContent = siteTitle;
+    cursor?.remove();
   }
 
   async function animateTitle() {
@@ -207,12 +209,17 @@ const isActive = (path: string) => {
   }
 
   function toggleNav() {
-    const menuBtn = document.querySelector("#menu-btn");
+    const menuBtn = document.querySelector("#menu-btn") as
+      | HTMLButtonElement
+      | undefined;
     const menuItems = document.querySelector("#menu-items");
     const menuIcon = document.querySelector("#menu-icon");
     const closeIcon = document.querySelector("#close-icon");
 
     if (!menuBtn || !menuItems || !menuIcon || !closeIcon) return;
+    if (menuBtn.dataset.navBound === "true") return;
+
+    menuBtn.dataset.navBound = "true";
 
     menuBtn.addEventListener("click", () => {
       const openMenu = menuBtn.getAttribute("aria-expanded") === "true";
@@ -229,9 +236,17 @@ const isActive = (path: string) => {
   toggleNav();
   animateTitle();
 
-  // Runs on view transitions navigation
-  document.addEventListener("astro:after-swap", toggleNav);
+  const headerEvents = window as Window & {
+    astroPaperHeaderEventsBound?: boolean;
+  };
 
-  // Don't rerun the animation on view transitions navigation
-  document.addEventListener("astro:after-swap", showTitle);
+  if (!headerEvents.astroPaperHeaderEventsBound) {
+    headerEvents.astroPaperHeaderEventsBound = true;
+
+    // Runs on view transitions navigation
+    document.addEventListener("astro:after-swap", toggleNav);
+
+    // Don't rerun the animation on view transitions navigation
+    document.addEventListener("astro:after-swap", showTitle);
+  }
 </script>

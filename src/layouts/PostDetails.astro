@@ -195,6 +195,8 @@ const nextPost =
   /** Create a progress indicator
    *  at the top */
   function createProgressBar() {
+    document.querySelector(".progress-container")?.remove();
+
     // Create the main container div
     const progressContainer = document.createElement("div");
     progressContainer.className =
@@ -216,20 +218,31 @@ const nextPost =
   /** Update the progress bar
    *  when user scrolls */
   function updateScrollProgress() {
-    document.addEventListener("scroll", () => {
+    const postDetailsWindow = window;
+
+    if (postDetailsWindow.postScrollHandler) {
+      document.removeEventListener(
+        "scroll",
+        postDetailsWindow.postScrollHandler
+      );
+    }
+
+    postDetailsWindow.postScrollHandler = () => {
       const winScroll =
         document.body.scrollTop || document.documentElement.scrollTop;
       const height =
         document.documentElement.scrollHeight -
         document.documentElement.clientHeight;
-      const scrolled = (winScroll / height) * 100;
+      const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
       if (document) {
         const myBar = document.getElementById("myBar");
         if (myBar) {
           myBar.style.width = scrolled + "%";
         }
       }
-    });
+    };
+
+    document.addEventListener("scroll", postDetailsWindow.postScrollHandler);
   }
   updateScrollProgress();
 
@@ -240,6 +253,8 @@ const nextPost =
       document.querySelectorAll("h2, h3, h4, h5, h6")
     );
     for (const heading of headings) {
+      if (heading.querySelector(".heading-link")) continue;
+
       heading.classList.add("group");
       const link = document.createElement("a");
       link.className =
@@ -262,6 +277,8 @@ const nextPost =
     const codeBlocks = Array.from(document.querySelectorAll("pre"));
 
     for (const codeBlock of codeBlocks) {
+      if (codeBlock.querySelector(".copy-code")) continue;
+
       const wrapper = document.createElement("div");
       wrapper.style.position = "relative";
 
@@ -300,15 +317,23 @@ const nextPost =
   /** Scrolls the document to the top when
    * the "Back to Top" button is clicked. */
   function backToTop() {
-    document.querySelector("#back-to-top")?.addEventListener("click", () => {
+    const backToTopButton = document.querySelector("#back-to-top");
+    if (!backToTopButton) return;
+
+    backToTopButton.onclick = () => {
       document.body.scrollTop = 0; // For Safari
       document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
-    });
+    };
   }
   backToTop();
 
+  const postDetailsWindow = window;
+
   /* Go to page start after page swap */
-  document.addEventListener("astro:after-swap", () =>
-    window.scrollTo({ left: 0, top: 0, behavior: "instant" })
-  );
+  if (!postDetailsWindow.postAfterSwapBound) {
+    postDetailsWindow.postAfterSwapBound = true;
+    document.addEventListener("astro:after-swap", () =>
+      window.scrollTo({ left: 0, top: 0, behavior: "instant" })
+    );
+  }
 </script>
