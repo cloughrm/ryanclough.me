@@ -16,7 +16,8 @@ const { href, frontmatter, secHeading = true } = Astro.props;
 const { title, pubDatetime, modDatetime, description, ogImage } = frontmatter;
 
 const headerProps = {
-  class: "text-xl font-bold",
+  class:
+    "text-xl font-bold text-accent transition-opacity group-hover:opacity-75 group-focus-visible:opacity-75",
 };
 
 const localOgImage =
@@ -30,8 +31,8 @@ const fallbackOgImageUrl = SITE.dynamicOgImage
 const thumbnailUrl = ogImageUrl ?? fallbackOgImageUrl;
 ---
 
-<li class="my-12 flex flex-col gap-3">
-  <a href={href} class="block text-lg font-medium text-accent hover:opacity-75">
+<li class="my-12">
+  <a href={href} class="group flex flex-col gap-3">
     {
       secHeading ? (
         <h2 {...headerProps}>{title}</h2>
@@ -39,43 +40,43 @@ const thumbnailUrl = ogImageUrl ?? fallbackOgImageUrl;
         <h3 {...headerProps}>{title}</h3>
       )
     }
-  </a>
 
-  <div class="flex flex-row gap-2 sm:gap-12">
-    <!-- Left Side Content -->
-    <div class="min-w-0 flex-1">
-      <p class="line-clamp-3 py-1 sm:line-clamp-5">{description}</p>
-      <Datetime pubDatetime={pubDatetime} modDatetime={modDatetime} />
-    </div>
+    <div class="flex flex-row gap-2 sm:gap-12">
+      <!-- Left Side Content -->
+      <div class="min-w-0 flex-1">
+        <p class="line-clamp-3 py-1 sm:line-clamp-5">{description}</p>
+        <Datetime pubDatetime={pubDatetime} modDatetime={modDatetime} />
+      </div>
 
-    <!-- Right Side Image -->
-    <!-- Note, Images are 171x96px, original images are meant to be 1600x900 -->
-    <!-- For small screens, 103x58px -->
-    <div
-      class:list={[
-        "flex items-center self-center",
-        "overflow-clip rounded-lg opacity-75 contrast-125 grayscale",
-        "h-[58px] w-[103px] min-w-[103px]",
-        "sm:h-[96px] sm:w-[171px] sm:min-w-[171px]",
-      ]}
-    >
-      {
-        localOgImage ? (
-          <Picture src={localOgImage} alt={title} width={171} height={96} />
-        ) : (
-          thumbnailUrl && (
-            <img
-              src={thumbnailUrl}
-              alt={title}
-              width="171"
-              height="96"
-              loading="lazy"
-              decoding="async"
-              class="h-full w-full object-cover"
-            />
+      <!-- Right Side Image -->
+      <!-- Note, Images are 171x96px, original images are meant to be 1600x900 -->
+      <!-- For small screens, 103x58px -->
+      <div
+        class:list={[
+          "flex items-center self-center",
+          "overflow-clip rounded-lg opacity-75 contrast-125 grayscale",
+          "h-[58px] w-[103px] min-w-[103px]",
+          "sm:h-[96px] sm:w-[171px] sm:min-w-[171px]",
+        ]}
+      >
+        {
+          localOgImage ? (
+            <Picture src={localOgImage} alt={title} width={171} height={96} />
+          ) : (
+            thumbnailUrl && (
+              <img
+                src={thumbnailUrl}
+                alt={title}
+                width="171"
+                height="96"
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-cover"
+              />
+            )
           )
-        )
-      }
+        }
+      </div>
     </div>
-  </div>
+  </a>
 </li>
