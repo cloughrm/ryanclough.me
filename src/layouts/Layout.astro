@@ -63,6 +63,7 @@ const structuredData = pubDatetime
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <meta name="color-scheme" content="light dark" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -141,9 +142,35 @@ const structuredData = pubDatetime
       )
     }
 
+    <script is:inline>
+      (() => {
+        const primaryColorScheme = "";
+        const getPreferTheme = () => {
+          try {
+            const currentTheme = localStorage.getItem("theme");
+            if (currentTheme === "light" || currentTheme === "dark") {
+              return currentTheme;
+            }
+          } catch {
+            // Continue with the configured or system preference.
+          }
+
+          if (primaryColorScheme) return primaryColorScheme;
+
+          return window.matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light";
+        };
+
+        const theme = getPreferTheme();
+        document.documentElement.setAttribute("data-theme", theme);
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
+
     <ClientRouter />
 
-    <script is:inline src="/toggle-theme.js" async></script>
+    <script is:inline src="/toggle-theme.js" defer></script>
   </head>
   <body>
     <slot />
