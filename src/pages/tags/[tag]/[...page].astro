@@ -12,6 +12,10 @@ import getPostsByTag from "@/utils/getPostsByTag";
 import { SITE } from "@/config";
 
 export async function getStaticPaths({ paginate }: GetStaticPathsOptions) {
+  if (!SITE.showTags) {
+    return [];
+  }
+
   const posts = await getCollection("blog");
   const tags = getUniqueTags(posts);
 
