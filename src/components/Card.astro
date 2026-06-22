@@ -19,41 +19,41 @@ const headerProps = {
 };
 ---
 
-<li class="my-12 flex shrink grow flex-row gap-2 sm:gap-12">
-  <!-- Left Side Content -->
-  <div class="basis-3/4">
-    <a
-      href={href}
-      class="inline-block text-lg font-medium text-accent hover:opacity-75"
-    >
-      {
-        secHeading ? (
-          <h2 {...headerProps}>{title}</h2>
-        ) : (
-          <h3 {...headerProps}>{title}</h3>
-        )
-      }
-    </a>
-    <p class="line-clamp-3 py-1 sm:line-clamp-5">{description}</p>
-    <Datetime pubDatetime={pubDatetime} modDatetime={modDatetime} />
-  </div>
+<li class="my-12 flex flex-col gap-3">
+  <a href={href} class="block text-lg font-medium text-accent hover:opacity-75">
+    {
+      secHeading ? (
+        <h2 {...headerProps}>{title}</h2>
+      ) : (
+        <h3 {...headerProps}>{title}</h3>
+      )
+    }
+  </a>
 
-  <!-- Right Side Image -->
-  <!-- Note, Images are 171x96px, original images are meant to be 1600x900 -->
-  <!-- For small screens, 103x58px -->
-  <div
-    class:list={[
-      "flex items-center self-center",
-      "overflow-clip rounded-lg opacity-75 contrast-125 grayscale",
-      "h-[58px] w-[103px] min-w-[103px]",
-      "sm:h-[96px] sm:w-[171px] sm:min-w-[171px]",
-    ]}
-  >
-    <Picture
-      src={ogImage as ImageMetadata}
-      alt={title}
-      width={171}
-      height={96}
-    />
+  <div class="flex flex-row gap-2 sm:gap-12">
+    <!-- Left Side Content -->
+    <div class="min-w-0 flex-1">
+      <p class="line-clamp-3 py-1 sm:line-clamp-5">{description}</p>
+      <Datetime pubDatetime={pubDatetime} modDatetime={modDatetime} />
+    </div>
+
+    <!-- Right Side Image -->
+    <!-- Note, Images are 171x96px, original images are meant to be 1600x900 -->
+    <!-- For small screens, 103x58px -->
+    <div
+      class:list={[
+        "flex items-center self-center",
+        "overflow-clip rounded-lg opacity-75 contrast-125 grayscale",
+        "h-[58px] w-[103px] min-w-[103px]",
+        "sm:h-[96px] sm:w-[171px] sm:min-w-[171px]",
+      ]}
+    >
+      <Picture
+        src={ogImage as ImageMetadata}
+        alt={title}
+        width={171}
+        height={96}
+      />
+    </div>
   </div>
 </li>

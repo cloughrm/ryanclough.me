@@ -1,6 +1,6 @@
 # AstroPaper 📄
 
-![AstroPaper](public/astropaper-og.jpg)
+![ryanclough.me Open Graph image](public/og/index.png)
 [![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white)](https://www.figma.com/community/file/1356898632249991861)
 ![Typescript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![GitHub](https://img.shields.io/github/license/satnaing/astro-paper?color=%232F3741&style=for-the-badge)
@@ -44,9 +44,8 @@ Inside of AstroPaper, you'll see the following folders and files:
 /
 ├── public/
 │   ├── assets/
+│   ├── og/
 |   ├── pagefind/ # auto-generated when build
-│   └── favicon.svg
-│   └── astropaper-og.jpg
 │   └── favicon.svg
 │   └── toggle-theme.js
 ├── src/

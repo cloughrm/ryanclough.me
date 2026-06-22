@@ -4,7 +4,7 @@ export const SITE = {
   profile: "https://ryanclough.me",
   desc: "Personal blog of Ryan Clough.",
   title: "ryanclough.me",
-  ogImage: "astropaper-og.jpg",
+  ogImage: "og/index.png",
   lightAndDarkMode: true,
   postPerIndex: 25,
   postPerPage: 25,
