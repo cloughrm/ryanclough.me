@@ -1,30 +1,36 @@
 ---
 pubDatetime: 2025-05-08
-title: "Server Actions vs API Routes: Modern Data Mutations in Next.js & Remix"
+title: "Server Actions, Route Actions, and API Routes: Modern Data Mutations in Next.js & Remix"
 slug: server-actions-vs-api-routes
 featured: false
 ogImage: "../../assets/images/server-actions.png"
 tags:
   - javascript
 draft: false
-description: "I’ve recently been exploring Next.js and Remix. One of the most intriguing new patterns is Server Actions — a modern alternative to the traditional API route approach for handling data mutations. In this post, I’ll break down what Server Actions are, how they compare to API routes, their benefits and tradeoffs, and how to architect an app that needs both UI-driven and external API access."
+description: "I’ve recently been exploring Next.js and Remix. One of the most intriguing modern patterns is colocating server-side mutation logic with your UI — Server Actions in Next.js and route actions in Remix. In this post, I’ll break down how these patterns compare to API routes, their benefits and tradeoffs, and how to architect an app that needs both UI-driven and external API access."
 ---
 
-As a web developer with experience in React, Flask, Django, FastAPI, and Express, I’ve recently been exploring Next.js and Remix. One of the most intriguing new patterns is **Server Actions** — a modern alternative to the traditional API route approach for handling data mutations.
+As a web developer with experience in React, Flask, Django, FastAPI, and Express, I’ve recently been exploring Next.js and Remix. One of the most intriguing modern patterns is colocating server-side mutation logic with your UI — **Server Actions** in Next.js and route `action`s in Remix.
 
-In this post, I’ll break down what Server Actions are, how they compare to API routes, their benefits and tradeoffs, and how to architect an app that needs both UI-driven and external API access.
+In this post, I’ll break down how these UI-driven mutation patterns compare to API routes, their benefits and tradeoffs, and how to architect an app that needs both UI-driven and external API access.
 
-## What Are Server Actions?
+## What Are Server Actions and Route Actions?
 
-**Server Actions** are a new paradigm in frameworks like Next.js (v13+) and Remix (v2+), allowing you to define server-side logic _directly_ alongside your UI components. Instead of creating a separate API route in another codebase and calling it from the client, you define a function (the "action") that runs on the server and invoke it from your components — often via form submission.
+In Next.js, **Server Actions** are Server Functions used for mutations and form submissions. You define an async function that runs on the server and invoke it from your UI, often through a form.
 
-## Traditional API Routes (a.k.a. "The Old Way")
+In Remix v2, route `action`s are server-only functions exported from route modules. They run when a non-`GET` request is made to the route. Remix `<Form>` and `useFetcher` make those route actions feel colocated with the UI, but they are still route-based HTTP mutation handlers.
 
-1. You write endpoints (e.g., `/api/user`) in your backend (Express, Flask, Django, etc.). This involves additional overhead of managing a seperate codebase / deployment for an API layer.
-2. The frontend makes HTTP requests (fetch, axios, etc.) to these endpoints. This involves an additional layer of code in your frontend to handle HTTP requests. It also typically involves making the call using `useEffect` and managing the response in state.
-3. The backend handles the request, processes data, and returns a response (usually JSON).
+Both patterns reduce the need to create a separate API endpoint for every UI interaction, but they are not the same framework primitive.
 
-## Benefits of Server Actions
+## Explicit API Endpoints
+
+1. You write an HTTP endpoint, such as an Express route, Flask view, Django view, Next.js Route Handler, or Remix Resource Route.
+2. A client calls that endpoint with `fetch`, axios, a mobile app, a webhook provider, or another external integration.
+3. The handler validates the request, processes data, and returns an HTTP response, often JSON.
+
+This is still the right shape for public or cross-client APIs. The difference is that modern full-stack frameworks also give you a more integrated option for mutations that only exist to support your own web UI.
+
+## Benefits of UI-Driven Server Mutations
 
 ### 1. Colocation
 
@@ -33,23 +39,23 @@ Logic for data mutations lives right next to the component that uses it.
 
 ### 2. Type Safety (with TypeScript)
 
-Since the action is a function, you get end-to-end type safety (no serialization/deserialization boundary).  
-**Benefit:** Fewer bugs, better developer experience.
+Since the action is a function, TypeScript can make the call sites and return shapes easier to model than hand-written request/response glue.  
+**Benefit:** Fewer bugs and better developer experience, as long as you remember that inputs still come from the client and return values still cross a serialization boundary.
 
 ### 3. No Manual API Calls / Less Code
 
-You invoke the backend function directly from your frontend code (e.g., via a form or a function call), not via `fetch`.  
-**Benefit:** Less boilerplate, no need for a seperate API project, no need to manage URLs, headers, etc.
+You use framework primitives such as a Next.js form action, a Remix `<Form>`, or `useFetcher` instead of manually assembling a `fetch` request for every UI mutation.  
+**Benefit:** Less boilerplate, no need for a separate API project just for UI mutations, and less manual URL/header plumbing.
 
 ### 4. Automatic Server/Client Boundary
 
 The framework ensures the function only runs on the server, even though you call it from the client.  
 **Benefit:** Security and performance are easier to manage.
 
-### 5. Built-in CSRF Protection
+### 5. CSRF and Origin Protections
 
-Frameworks often handle CSRF for you, especially with form submissions.  
-**Benefit:** More secure by default.
+Frameworks provide some protection for common same-origin form and mutation flows. Next.js checks Server Action request origins by default, and Remix leans on standard form behavior plus cookie settings such as `SameSite=Lax` when you use its session helpers.  
+**Benefit:** More secure defaults, while still leaving room for explicit CSRF tokens or stricter checks where your app needs them.
 
 ## Tradeoffs and Limitations
 
@@ -60,7 +66,7 @@ The network boundary is abstracted away.
 
 ### 2. Limited to Framework
 
-Server Actions are tied to the framework’s conventions (Next.js, Remix, etc.).  
+Server Actions and route actions are tied to the framework’s conventions.  
 **Tradeoff:** Harder to share logic across different stacks or migrate away.
 
 ### 3. Testing and Tooling
@@ -71,41 +77,46 @@ Testing may require framework-specific tools/mocks.
 ### 4. Granular Control
 
 You have full control over HTTP methods, headers, status codes, etc., with API routes.  
-**Tradeoff:** Some of this is abstracted or requires extra work to customize with Server Actions.
+**Tradeoff:** Some of this is abstracted or requires extra work to customize with UI-driven mutation handlers.
 
 ### 5. Interoperability
 
 API routes can be consumed by any client (mobile, third-party, etc.).  
-**Tradeoff:** Server Actions are primarily for your own app’s frontend; not easily exposed to external clients.
+**Tradeoff:** Next.js Server Actions are primarily for your own app’s frontend, and Remix route actions are primarily designed around route-level app interactions. For external clients, expose intentional API routes instead.
 
-## Can Users Invoke Server Actions Directly?
+## Can Users Invoke These Actions Directly?
 
-**No.**  
-Server Actions are not exposed as public HTTP endpoints. They are invoked through framework-managed mechanisms (e.g., form submissions, special fetches) that are tightly coupled to your app’s frontend. The framework ensures that only requests originating from your app’s UI, with the correct context and credentials, can trigger these actions.
+**Treat them as reachable, not as a public API contract.**  
+In Next.js, Server Actions / Server Functions do not map to a stable, documented URL that you should expose to external clients. But they are still invoked over the network. Behind the scenes, Next.js uses `POST` requests and framework-managed action identifiers so the client can reference an action.
+
+That implementation detail is not an authorization boundary. If a Server Action is used by your app, assume a crafted request may be able to reach it. Always validate input and verify authentication and authorization inside the action itself.
+
+Remix v2 is different. A Remix route `action` is a server-only function tied to a route module, and Remix calls it when a non-`GET` request (`POST`, `PUT`, `PATCH`, or `DELETE`) is made to that route. In other words, Remix actions are directly addressable through their route URLs, even when your UI normally reaches them through `<Form>` or `useFetcher`.
 
 ## Security Perspective
 
-From a security perspective, **it is not possible for a user to directly trigger a Server Action as a public HTTP endpoint**. There is no stable, guessable, or documented HTTP endpoint for a Server Action. The invocation protocol is internal to the framework and not intended for external use.
+From a security perspective, the right mental model is: Next.js Server Actions and Remix route actions are useful for UI-driven mutations, but they should still be treated as reachable mutation entry points.
 
-- **CSRF Protection:** Server Actions are typically protected against cross-site request forgery by default.
-- **Session/Authentication:** They run in the context of the current user session, so only authenticated users (if your app requires it) can trigger them. Note, you should still always verify your users within each server function (see CVE-2025-29927 to understand why).
-- **No External Access:** You cannot `curl` or `POST` to a Server Action from outside the app without going through the UI and its security checks.
+- **Next.js:** Server Actions use framework-managed `POST` requests, encrypted action identifiers, same-origin checks, and a default request body limit. Those protections reduce accidental exposure, but they do not replace per-action authentication, authorization, and input validation.
+- **Remix v2:** Route actions are invoked by non-`GET` requests to route URLs. `<Form>` and `useFetcher` make that ergonomic inside the app, but the route can still receive direct HTTP requests.
+- **Session/Authentication:** Never rely only on page rendering, middleware, or hidden UI controls. Re-check the current user and resource permissions in each mutation function. See CVE-2025-29927 for a concrete example of why middleware-only authorization can be risky.
+- **External Access:** If scripts, third-party services, or mobile apps need stable access, expose an intentional API surface with Next.js Route Handlers or Remix Resource Routes.
 
 ## A Useful Approach: Hybrid UI + API Access
 
 If your app is primarily UI-driven but sometimes needs API access (for automation, integrations, or mobile clients), use both patterns:
 
-1. **Use Server Actions for UI-Driven Logic**
+1. **Use Server Actions or Route Actions for UI-Driven Logic**
 
-   - For all user interactions that happen through your web UI, use Server Actions.
+   - For user interactions that happen through your web UI, use Next.js Server Actions or Remix route actions.
 
-2. **Where Needed, Expose API Routes for External Access**
+2. **Where Needed, Expose API Endpoints for External Access**
 
-   - For endpoints that need to be accessed by scripts, third-party services, or mobile apps, define API routes. Modern frameworks like Next and Remix allow you to easily create API endpoints directly within the same codebase as your Frontend.
+   - For endpoints that need to be accessed by scripts, third-party services, or mobile apps, define explicit API endpoints. In Next.js App Router, use Route Handlers. In Remix v2, use Resource Routes.
 
 3. **Share Business Logic**
    - Extract your core logic (e.g., database operations, validation) into shared modules.
-   - Both Server Actions and API routes should call these shared functions.
+   - Both UI-driven actions and explicit API endpoints should call these shared functions.
 
 **Example:**
 
@@ -119,10 +130,12 @@ export async function createUserInDb(data: any) {
 }
 ```
 
-Implement a "thin" server action.
+In Next.js, implement a "thin" Server Action.
 
 ```ts
-// app/users/page.tsx (Server Action)
+// app/actions.ts
+"use server";
+
 import { createUserInDb } from "@/lib/users";
 
 export async function createUser(formData: FormData) {
@@ -131,10 +144,10 @@ export async function createUser(formData: FormData) {
 }
 ```
 
-As needed, add "thin" API routes for a specific automation needs.
+As needed, add a "thin" Route Handler for external API access.
 
 ```ts
-// app/api/users/route.ts (API Route)
+// app/api/users/route.ts
 import { createUserInDb } from "@/lib/users";
 
 export async function POST(req: Request) {
@@ -147,8 +160,8 @@ export async function POST(req: Request) {
 
 ## Conclusion
 
-- Server Actions are a powerful, ergonomic way to handle UI-driven mutations in modern frameworks like Next.js and Remix.
-- They are **not** public endpoints and cannot be triggered directly by external clients.
-- For external API access, API routes remain the right tool.
+- Next.js Server Actions and Remix route actions are powerful, ergonomic ways to handle UI-driven mutations.
+- They are **not** the same framework primitive, and they are **not** stable public API contracts. Treat them as reachable HTTP mutation entry points and protect them accordingly.
+- For external API access, explicit API endpoints remain the right tool.
 - Share your business logic between both to avoid duplication and keep your app maintainable.
 - If you’re building a modern web app, consider this hybrid approach for the best of both worlds!
