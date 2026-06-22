@@ -1,5 +1,5 @@
 ---
-pubDatetime: 2025-05-08
+pubDatetime: 2025-05-08T00:00:00-07:00
 title: "Async vs Sync in JavaScript: What Every Web Developer Should Know"
 slug: async-vs-sync-in-javascript
 featured: false

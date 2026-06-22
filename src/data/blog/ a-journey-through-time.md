@@ -1,5 +1,5 @@
 ---
-pubDatetime: 2025-03-25
+pubDatetime: 2025-03-25T00:00:00-07:00
 title: "A Journey Through Time: Three Nostalgic 404 Pages"
 slug: a-journey-through-time
 featured: false

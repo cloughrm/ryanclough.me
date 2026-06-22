@@ -24,7 +24,7 @@ const myDatetime = new Date(
 <div class={`flex space-x-1 ${className}`.trim()}>
   <span class={`${size === "sm" ? "text-xs" : "text-sm"}`}>
     {modDatetime && modDatetime > pubDatetime ? "Updated:" : "Published:"}
-    <time datetime={myDatetime.toISOString()}
+    <time datetime={myDatetime.toISOString()} data-local-date
       >{
         myDatetime.toLocaleDateString(LOCALE.langTag, {
           year: "numeric",
@@ -35,3 +35,23 @@ const myDatetime = new Date(
     >
   </span>
 </div>
+
+<script>
+  function formatLocalDates() {
+    const formatter = new Intl.DateTimeFormat(navigator.languages, {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    document.querySelectorAll("time[data-local-date]").forEach(time => {
+      const date = new Date((time as HTMLTimeElement).dateTime);
+      if (!Number.isNaN(date.getTime())) {
+        time.textContent = formatter.format(date);
+      }
+    });
+  }
+
+  document.addEventListener("astro:page-load", formatLocalDates);
+  formatLocalDates();
+</script>

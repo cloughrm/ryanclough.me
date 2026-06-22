@@ -1,6 +1,6 @@
 ---
-pubDatetime: 2023-01-28
-modDatetime: 2025-03-12
+pubDatetime: 2023-01-28T00:00:00-08:00
+modDatetime: 2025-03-12T00:00:00-07:00
 title: New Mac Setup Guide
 slug: new-mac-setup-guide
 featured: false
