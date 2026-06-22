@@ -46,7 +46,7 @@ const backUrl = SITE.showBackButton ? `${Astro.url.pathname}` : "/";
       }
 
       // Watch for the search input to appear in the DOM
-      const observer = new MutationObserver((mutations, obs) => {
+      const observer = new MutationObserver((_, obs) => {
         const searchInput = document.querySelector(
           pageFindInputClass
         ) as HTMLInputElement;
